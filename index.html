@@ -1,0 +1,953 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مكتبة نيني — دليل التشغيل</title>
+</head>
+<body>
+<style>
+/* ══ اللوحة كما أُرسلت ══
+   #201d39 · #514575 · #a79dda · #e58500 · #ffc451 */
+:root{
+  --indigo:#201d39; --plum:#514575; --violet:#a79dda; --amber:#e58500; --honey:#ffc451;
+  --g1:linear-gradient(135deg,#201d39,#a79dda);
+  --g2:linear-gradient(135deg,#a79dda,#e58500);
+  --g3:linear-gradient(135deg,#ffc451,#514575);
+  --g4:linear-gradient(135deg,#e58500,#ffc451);
+  --g5:linear-gradient(135deg,#514575,#a79dda);
+
+  --bg:#1B1830; --surface:#2C2650; --surface-2:#372F5F; --raise:#40376C;
+  --line:#4A3F78; --line-soft:#372F5F;
+  --text:#EFECFA; --text-soft:#a79dda; --text-faint:#9D91D0;
+  --shadow:0 2px 6px rgba(10,8,22,.4), 0 18px 44px -22px rgba(10,8,22,.9);
+  --glow:0 0 0 1px rgba(229,133,0,.45), 0 10px 34px -14px rgba(229,133,0,.4);
+
+  --font-display:"SF Arabic","Geeza Pro","Noto Kufi Arabic","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-body:"SF Arabic","Geeza Pro","Segoe UI",system-ui,-apple-system,sans-serif;
+  --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+
+  --s1:.4rem; --s2:.7rem; --s3:1.05rem; --s4:1.6rem; --s5:2.4rem;
+  --r-s:10px; --r-m:16px; --r-l:24px; --r-xl:30px; --r-pill:999px;
+}
+:root[data-theme="light"]{
+  --bg:#EDE9F9; --surface:#FBFAFE; --surface-2:#EFEAFA; --raise:#FFFFFF;
+  --line:#D3C9EE; --line-soft:#E3DDF5;
+  --text:#201d39; --text-soft:#514575; --text-faint:#6A5D96;
+  --amber:#9E5C00; --honey:#7E5F0E; --violet:#514575;
+  --shadow:0 1px 3px rgba(32,29,57,.07), 0 14px 34px -18px rgba(32,29,57,.3);
+  --glow:0 0 0 1px rgba(158,92,0,.4), 0 10px 30px -16px rgba(158,92,0,.3);
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0; direction:rtl; background:var(--bg); color:var(--text);
+  font-family:var(--font-body); font-size:16px; line-height:1.75;
+  -webkit-font-smoothing:antialiased; position:relative;
+}
+/* ══ الخلفية المتدرّجة الغنية — ثابتة خلف كل شيء ══ */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-2; pointer-events:none;
+  background:
+    radial-gradient(70vw 55vh at 85% -8%,  rgba(229,133,0,.34), transparent 62%),
+    radial-gradient(60vw 50vh at 6% 4%,    rgba(167,157,218,.24), transparent 64%),
+    radial-gradient(55vw 45vh at 98% 42%,  rgba(255,196,81,.18), transparent 60%),
+    radial-gradient(75vw 60vh at 14% 62%,  rgba(81,69,117,.65), transparent 66%),
+    radial-gradient(60vw 50vh at 78% 96%,  rgba(167,157,218,.22), transparent 64%),
+    radial-gradient(50vw 45vh at 40% 30%,  rgba(255,196,81,.09), transparent 66%);
+}
+:root[data-theme="light"] body::before{
+  background:
+    radial-gradient(70vw 55vh at 85% -8%,  rgba(229,133,0,.20), transparent 62%),
+    radial-gradient(60vw 50vh at 6% 4%,    rgba(167,157,218,.34), transparent 64%),
+    radial-gradient(75vw 60vh at 14% 62%,  rgba(81,69,117,.16), transparent 66%),
+    radial-gradient(60vw 50vh at 78% 96%,  rgba(255,196,81,.22), transparent 64%);
+}
+/* حبيبات ناعمة تعطي عمقاً بدل السطح المسطّح */
+body::after{
+  content:""; position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.5;
+  background-image:radial-gradient(rgba(255,255,255,.05) 1px, transparent 1px);
+  background-size:3px 3px;
+}
+:root[data-theme="light"] body::after{opacity:.35; background-image:radial-gradient(rgba(32,29,57,.05) 1px, transparent 1px)}
+
+.wrap{max-width:1240px; margin:0 auto; padding:0 var(--s3)}
+.strip{height:6px; background:linear-gradient(to left,#201d39,#514575 20%,#a79dda 45%,#e58500 74%,#ffc451 100%)}
+
+/* ══ الترويسة المضغوطة ══ */
+.masthead .wrap{padding:var(--s4) var(--s3) var(--s3)}
+.top-row{display:flex; align-items:flex-start; gap:var(--s5); flex-wrap:wrap}
+.eyebrow{
+  display:inline-flex; align-items:center; gap:.5rem;
+  font-family:var(--font-mono); font-size:.66rem; letter-spacing:.16em;
+  color:var(--honey); margin:0 0 .7rem;
+  background:rgba(255,196,81,.10); border:1px solid rgba(255,196,81,.3);
+  border-radius:var(--r-pill); padding:.22rem .8rem;
+}
+:root[data-theme="light"] .eyebrow{background:rgba(126,95,14,.08); border-color:rgba(126,95,14,.32)}
+.eyebrow b{width:5px; height:5px; border-radius:50%; background:var(--amber); flex:none}
+h1{
+  font-family:var(--font-display); font-weight:800; text-wrap:balance;
+  font-size:clamp(1.7rem,4vw,2.6rem); line-height:1.35; margin:0 0 .5rem;
+  letter-spacing:-.015em;
+}
+h1 span{background:var(--g4); -webkit-background-clip:text; background-clip:text; color:transparent}
+.lede{max-width:56ch; color:var(--text-soft); font-size:.98rem; margin:0}
+.lede strong{color:var(--text); font-weight:700}
+.facts{display:flex; flex-wrap:wrap; gap:.5rem; margin-top:var(--s3)}
+.fact{
+  display:flex; align-items:center; gap:.5rem; border-radius:var(--r-pill);
+  padding:.35rem .9rem .35rem .6rem; background:var(--surface); border:1px solid var(--line);
+}
+.fact b{
+  font-family:var(--font-mono); font-size:1.15rem; font-weight:700; line-height:1;
+  font-variant-numeric:tabular-nums; color:var(--honey);
+}
+:root[data-theme="light"] .fact b{color:var(--amber)}
+.fact span{font-size:.76rem; color:var(--text-soft)}
+
+/* ══ التبويبات — بديل التمرير الطويل ══ */
+.tabs{
+  position:sticky; top:0; z-index:70; margin-top:var(--s3);
+  background:color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  border-block:1px solid var(--line-soft);
+}
+.tabs .wrap{display:flex; align-items:center; gap:.4rem; height:3.4rem; overflow-x:auto; scrollbar-width:none}
+.tabs .wrap::-webkit-scrollbar{display:none}
+.tab{
+  flex:none; border:1px solid var(--line); background:var(--surface); color:var(--text-soft);
+  border-radius:var(--r-pill); padding:.38rem .95rem; font-size:.88rem; cursor:pointer;
+  font-family:var(--font-body); white-space:nowrap; transition:.16s;
+  display:inline-flex; align-items:center; gap:.45rem;
+}
+.tab small{font-family:var(--font-mono); font-size:.68rem; opacity:.7}
+.tab:hover{color:var(--text); border-color:var(--text-faint)}
+.tab[aria-selected="true"]{background:var(--g4); color:var(--indigo); border-color:transparent; font-weight:700}
+.tab[aria-selected="true"] small{opacity:.75}
+.tog{
+  margin-inline-start:auto; flex:none; border:1px solid var(--line); background:var(--surface);
+  color:var(--text-soft); border-radius:var(--r-pill); padding:.3rem .8rem; cursor:pointer;
+  font-family:var(--font-mono); font-size:.7rem;
+}
+.tog:hover{color:var(--honey); border-color:var(--honey)}
+:where(.tab,.chip,.copy,#q,.tog,.check-btn,summary,a):focus-visible{outline:2px solid var(--honey); outline-offset:2px}
+
+.panel{padding:var(--s5) 0}
+.panel[hidden]{display:none}
+.phead{margin-bottom:var(--s4); max-width:70ch}
+h2{font-family:var(--font-display); font-weight:800; font-size:clamp(1.3rem,2.6vw,1.8rem); margin:0 0 .4rem; line-height:1.4}
+.sub{color:var(--text-soft); margin:0; font-size:.95rem}
+
+/* ══ 1 · لوحة الخطة — كل المراحل مرئية معاً ══ */
+.board{display:grid; gap:var(--s3); grid-template-columns:repeat(auto-fit,minmax(310px,1fr))}
+.ph{
+  border-radius:var(--r-l); padding:2px; box-shadow:var(--shadow);
+  display:flex; flex-direction:column;
+}
+.ph:nth-child(1){background:var(--g5)}
+.ph:nth-child(2){background:var(--g1)}
+.ph:nth-child(3){background:var(--g2)}
+.ph:nth-child(4){background:var(--g4)}
+.ph:nth-child(5){background:var(--g3)}
+.ph:nth-child(6){background:var(--g5)}
+.ph-in{
+  background:var(--surface); border-radius:calc(var(--r-l) - 2px);
+  padding:var(--s3); flex:1; display:flex; flex-direction:column;
+}
+.ph-h{display:flex; align-items:center; gap:.7rem; margin-bottom:.3rem}
+.ph-h em{
+  font-style:normal; font-family:var(--font-mono); font-weight:800; font-size:1.7rem;
+  line-height:1; font-variant-numeric:tabular-nums; color:var(--honey);
+}
+:root[data-theme="light"] .ph-h em{color:var(--amber)}
+.ph-h h3{font-family:var(--font-display); font-size:1.06rem; margin:0; font-weight:800}
+.ph-goal{font-size:.83rem; color:var(--text-soft); margin:0 0 var(--s3); line-height:1.6}
+.ph-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:.5rem}
+.ph-list li{display:grid; grid-template-columns:auto 1fr; gap:.55rem; align-items:baseline; font-size:.85rem}
+.ph-list li > i{
+  font-style:normal; font-family:var(--font-mono); font-size:.66rem; color:var(--text-faint);
+  font-variant-numeric:tabular-nums; padding-top:.15rem;
+}
+.ph-list b{font-family:var(--font-mono); font-size:.82rem; font-weight:700; color:var(--text); unicode-bidi:isolate}
+.ph-list u{text-decoration:none; color:var(--text-soft); font-size:.82rem; display:block; line-height:1.5}
+.kind{
+  display:inline-block; font-family:var(--font-mono); font-size:.58rem; letter-spacing:.05em;
+  padding:.05rem .4rem; border-radius:4px; margin-inline-start:.35rem; vertical-align:.1em;
+  border:1px solid currentColor; white-space:nowrap;
+}
+.k-skill{color:var(--violet)} .k-mcp{color:var(--honey)} .k-cli{color:var(--amber)}
+.k-tool{color:var(--violet)} .k-pack{color:var(--amber)}
+:root[data-theme="light"] .k-skill,:root[data-theme="light"] .k-tool{color:var(--plum)}
+
+/* ══ 2 · العدّة ══ */
+.controls{
+  display:flex; flex-wrap:wrap; gap:.45rem; align-items:center; margin-bottom:var(--s3);
+  position:sticky; top:3.4rem; z-index:60; padding:.7rem 0;
+  background:color-mix(in srgb, var(--bg) 90%, transparent);
+  backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+}
+#q{
+  flex:1 1 200px; min-width:170px; font-family:var(--font-body); font-size:.88rem;
+  padding:.45rem .95rem; border-radius:var(--r-pill); border:1px solid var(--line);
+  background:var(--surface); color:var(--text);
+}
+#q::placeholder{color:var(--text-faint)}
+.chip{
+  border:1px solid var(--line); background:var(--surface); color:var(--text-soft);
+  border-radius:var(--r-pill); padding:.3rem .8rem; font-size:.8rem; cursor:pointer;
+  font-family:var(--font-body); transition:.16s; display:inline-flex; align-items:center; gap:.4rem;
+}
+.chip i{width:14px; height:4px; border-radius:99px; flex:none; display:block}
+.chip:hover{color:var(--text); border-color:var(--text-faint)}
+.chip[aria-pressed="true"]{background:var(--amber); color:#fff; border-color:var(--amber)}
+.chip[aria-pressed="true"] i{background:#fff !important; opacity:.9}
+.sep{width:1px; height:22px; background:var(--line); margin:0 .25rem}
+.count{font-family:var(--font-mono); font-size:.72rem; color:var(--text-faint); margin-inline-start:auto; font-variant-numeric:tabular-nums}
+
+.grid{display:grid; gap:.85rem; grid-template-columns:repeat(auto-fill,minmax(272px,1fr))}
+.card{
+  background:linear-gradient(165deg, rgba(255,255,255,.05), transparent 60%), var(--surface);
+  border:1px solid var(--line); border-radius:var(--r-m);
+  padding:calc(var(--s3) + 4px) var(--s3) var(--s3);
+  box-shadow:var(--shadow); display:flex; flex-direction:column;
+  position:relative; overflow:hidden; transition:transform .18s, border-color .18s;
+}
+.card::before{content:""; position:absolute; top:0; inset-inline:0; height:3px}
+.card[data-cat="think"]::before{background:var(--g5)}
+.card[data-cat="brand"]::before{background:var(--g3)}
+.card[data-cat="web"]::before{background:var(--g2)}
+.card[data-cat="video"]::before{background:var(--g4)}
+.card[data-cat="shop"]::before{background:var(--g1)}
+.card:hover{transform:translateY(-2px); border-color:var(--text-faint)}
+.card.core{border-color:transparent; box-shadow:var(--glow), var(--shadow); border-radius:var(--r-l)}
+@media(min-width:900px){.card.core{grid-column:span 2}}
+.card .top{display:flex; align-items:flex-start; gap:.45rem; margin-bottom:.3rem; flex-wrap:wrap}
+.card .name{font-family:var(--font-mono); font-size:.9rem; font-weight:700; unicode-bidi:isolate; flex:1 1 auto; line-height:1.45}
+.card.core .name{font-size:1rem; color:var(--honey)}
+:root[data-theme="light"] .card.core .name{color:var(--amber)}
+.tag{
+  flex:none; font-family:var(--font-mono); font-size:.6rem; padding:.15rem .5rem;
+  border-radius:var(--r-pill); white-space:nowrap; border:1px solid currentColor; margin-top:.2rem;
+}
+.t-free{color:var(--violet)} .t-key{color:var(--honey)} .t-plan{color:var(--amber)}
+:root[data-theme="light"] .t-free{color:var(--plum)}
+.card .job{font-size:.855rem; color:var(--text-soft); margin:0 0 auto; padding-bottom:.6rem; line-height:1.65}
+.card .job b{color:var(--text); font-weight:700}
+.card .note{font-size:.74rem; color:var(--text-faint); margin:.6rem 0 0; display:flex; gap:.4rem; line-height:1.55}
+.card .note::before{content:"!"; font-family:var(--font-mono); color:var(--amber); font-weight:800; flex:none}
+.corepill{
+  align-self:flex-start; font-family:var(--font-mono); font-size:.58rem; letter-spacing:.1em;
+  color:var(--indigo); background:var(--g4); border-radius:var(--r-pill);
+  padding:.12rem .6rem; margin-bottom:.45rem; font-weight:700;
+}
+.empty{color:var(--text-faint); font-size:.92rem; padding:var(--s5) 0; text-align:center}
+
+/* ══ كتلة الأوامر ══ */
+.cmd{margin-top:.6rem; display:flex; border:1px solid var(--line); border-radius:var(--r-s); background:rgba(0,0,0,.22); overflow:hidden}
+:root[data-theme="light"] .cmd{background:var(--surface-2)}
+.cmd code{
+  direction:ltr; text-align:left; unicode-bidi:isolate; font-family:var(--font-mono);
+  font-size:.735rem; line-height:1.6; padding:.45rem .6rem; overflow-x:auto;
+  white-space:pre; flex:1; color:var(--text);
+}
+.copy{
+  flex:none; border:0; border-inline-start:1px solid var(--line); background:transparent;
+  color:var(--text-faint); font-family:var(--font-mono); font-size:.68rem; padding:0 .7rem;
+  cursor:pointer; transition:.15s;
+}
+.copy:hover{background:var(--amber); color:#fff}
+.copy.ok{background:var(--honey); color:var(--indigo)}
+
+/* ══ 3 · الوصفات ══ */
+.recipes{display:grid; gap:var(--s3); grid-template-columns:repeat(auto-fit,minmax(340px,1fr)); align-items:start}
+details.rec{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r-l);
+  box-shadow:var(--shadow); overflow:hidden; position:relative;
+}
+details.rec[open]{grid-column:1/-1}
+details.rec::before{content:""; position:absolute; inset-block:0; inset-inline-start:0; width:4px}
+details.rec:nth-of-type(1)::before{background:var(--g3)}
+details.rec:nth-of-type(2)::before{background:var(--g2)}
+details.rec:nth-of-type(3)::before{background:var(--g4)}
+details.rec:nth-of-type(4)::before{background:var(--g5)}
+details.rec > summary{cursor:pointer; padding:var(--s3) var(--s4); list-style:none; display:flex; align-items:center; gap:.8rem; flex-wrap:wrap}
+details.rec > summary::-webkit-details-marker{display:none}
+details.rec > summary::after{content:"+"; font-family:var(--font-mono); color:var(--amber); font-size:1.3rem; margin-inline-start:auto; line-height:1}
+details.rec[open] > summary::after{content:"−"}
+details.rec > summary:hover{background:var(--surface-2)}
+.rec-n{font-family:var(--font-mono); font-weight:800; font-size:1.3rem; color:var(--text-faint); font-variant-numeric:tabular-nums}
+.rec-t{font-family:var(--font-display); font-size:1.06rem; font-weight:800}
+.rec-m{font-family:var(--font-mono); font-size:.68rem; color:var(--honey); border:1px solid currentColor; border-radius:var(--r-pill); padding:.1rem .6rem}
+:root[data-theme="light"] .rec-m{color:var(--amber)}
+.rec-tools{font-family:var(--font-mono); font-size:.68rem; color:var(--text-faint); unicode-bidi:isolate; flex-basis:100%}
+.rec-body{padding:0 var(--s4) var(--s4); border-top:1px solid var(--line-soft); columns:2 320px; column-gap:var(--s4)}
+.step{padding:var(--s3) 0; break-inside:avoid; border-bottom:1px solid var(--line-soft)}
+.step .sh{display:flex; gap:.6rem; align-items:baseline}
+.step .sn{font-family:var(--font-mono); font-size:.68rem; color:var(--indigo); background:var(--honey); border-radius:var(--r-pill); padding:.02rem .45rem; font-weight:700; flex:none}
+.step .st{font-weight:700; font-size:.93rem}
+.step .sd{font-size:.85rem; color:var(--text-soft); margin:.2rem 0 0; padding-inline-start:2.1rem; line-height:1.6}
+.prompt{margin:.55rem 0 0; margin-inline-start:2.1rem; display:flex; border:1px solid var(--line); border-radius:var(--r-s); background:rgba(0,0,0,.22); overflow:hidden}
+:root[data-theme="light"] .prompt{background:var(--surface-2)}
+.prompt code{font-family:var(--font-body); font-size:.83rem; line-height:1.65; padding:.5rem .7rem; flex:1; white-space:pre-wrap; color:var(--text)}
+@media(max-width:560px){.step .sd,.prompt{margin-inline-start:0}}
+
+/* ══ 4 · القواعد + التركيب ══ */
+.two{display:grid; gap:var(--s4); grid-template-columns:repeat(auto-fit,minmax(330px,1fr)); align-items:start}
+.timeline{list-style:none; margin:0; padding:0; position:relative}
+.timeline::before{content:""; position:absolute; inset-inline-start:16px; top:12px; bottom:28px; width:2px; background:linear-gradient(to bottom,#ffc451,#e58500 32%,#a79dda 70%,#514575); border-radius:2px}
+.timeline li{position:relative; padding-inline-start:48px; padding-bottom:.85rem}
+.timeline li:last-child{padding-bottom:0}
+.tnum{
+  position:absolute; inset-inline-start:0; top:5px; width:34px; height:34px; border-radius:50%;
+  display:grid; place-items:center; font-family:var(--font-mono); font-size:.78rem; font-weight:700;
+  color:var(--indigo); background:var(--g4); box-shadow:0 0 0 4px var(--bg);
+}
+.timeline li.done .tnum{background:var(--surface-2); color:var(--text-faint)}
+.tcard{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:.8rem var(--s3); transition:opacity .2s}
+.timeline li.done .tcard{opacity:.45}
+.thead{display:flex; align-items:center; gap:.6rem; margin-bottom:.15rem}
+.thead b{font-family:var(--font-mono); font-size:.92rem; color:var(--honey); font-weight:700}
+:root[data-theme="light"] .thead b{color:var(--text)}
+.twhy{color:var(--text-soft); font-size:.85rem; margin:0; line-height:1.6}
+.check-btn{
+  margin-inline-start:auto; appearance:none; width:22px; height:22px; flex:none;
+  border:1.5px solid var(--text-faint); border-radius:7px; background:transparent; cursor:pointer; position:relative;
+}
+.check-btn:checked{background:var(--amber); border-color:var(--amber)}
+.check-btn:checked::after{content:"✓"; position:absolute; inset:0; display:grid; place-items:center; color:#fff; font-size:13px; font-weight:800}
+
+.golden{border-radius:var(--r-xl); padding:2px; background:linear-gradient(115deg,#e58500,#ffc451); margin-bottom:var(--s3)}
+.golden-in{background:var(--surface); border-radius:calc(var(--r-xl) - 2px); padding:var(--s3) var(--s4); display:flex; gap:var(--s3); align-items:flex-start}
+.golden .k{font-family:var(--font-mono); font-size:.62rem; letter-spacing:.12em; color:var(--honey); border:1px solid currentColor; border-radius:var(--r-pill); padding:.15rem .6rem; flex:none; margin-top:.3rem}
+:root[data-theme="light"] .golden .k{color:var(--amber)}
+.golden p{margin:0; font-size:.92rem; line-height:1.7}
+.golden p+p{margin-top:.5rem; color:var(--text-soft); font-size:.87rem}
+
+.mix{display:grid; gap:.85rem}
+.mixc{background:var(--surface); border:1px solid var(--line); border-radius:var(--r-m); padding:var(--s3)}
+.mixc:first-child{border:0; background:linear-gradient(115deg,#e58500,#ffc451 62%,#ffd88c); color:var(--indigo); border-radius:var(--r-l)}
+.mixc:first-child h4,.mixc:first-child p,.mixc:first-child h4 span,.mixc:first-child code{color:var(--indigo)}
+.mixc h4{margin:0 0 .25rem; font-size:.96rem; display:flex; gap:.55rem; align-items:baseline}
+.mixc h4 span{font-family:var(--font-mono); font-size:.74rem; color:var(--amber); flex:none; font-variant-numeric:tabular-nums}
+.mixc p{margin:0; font-size:.86rem; color:var(--text-soft); line-height:1.65}
+.mixc:first-child p{opacity:.85}
+.mixc code{font-family:var(--font-mono); font-size:.86em; color:var(--honey); unicode-bidi:isolate}
+:root[data-theme="light"] .mixc code{color:var(--amber)}
+.flow{display:flex; flex-wrap:wrap; gap:.35rem; align-items:center; margin-top:var(--s3); font-family:var(--font-mono); font-size:.74rem}
+.flow i{font-style:normal; border-radius:var(--r-pill); padding:.25rem .75rem; color:var(--indigo); font-weight:700}
+.flow i:nth-of-type(1){background:#a79dda} .flow i:nth-of-type(2){background:#b8a6dd}
+.flow i:nth-of-type(3){background:#cba9c9} .flow i:nth-of-type(4){background:#dfad9d}
+.flow i:nth-of-type(5){background:#eda06a} .flow i:nth-of-type(6){background:#f4a83f}
+.flow i:nth-of-type(7){background:#ffc451}
+.flow em{font-style:normal; color:var(--text-faint)}
+
+/* ══ 5 · تجاهليها ══ */
+.skipr{display:grid; grid-template-columns:minmax(150px,.8fr) 2fr; gap:.4rem var(--s4); padding:var(--s3) 0; border-bottom:1px solid var(--line-soft); align-items:baseline}
+.skipr:last-child{border-bottom:0}
+.skipr b{font-family:var(--font-mono); font-size:.8rem; color:var(--text-soft); font-weight:500; unicode-bidi:isolate; line-height:1.6}
+.skipr span{font-size:.88rem; color:var(--text-faint); line-height:1.65}
+@media(max-width:600px){.skipr{grid-template-columns:1fr}}
+
+footer{padding:var(--s4) 0 var(--s5); border-top:1px solid var(--line-soft); color:var(--text-faint); font-size:.82rem}
+footer a{color:var(--honey)}
+:root[data-theme="light"] footer a{color:var(--amber)}
+.reset{background:none; border:1px solid var(--line); color:var(--text-faint); cursor:pointer; border-radius:var(--r-pill); padding:.25rem .8rem; font-family:var(--font-mono); font-size:.7rem}
+.reset:hover{color:var(--amber); border-color:var(--amber)}
+
+@media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important} html{scroll-behavior:auto}}
+</style>
+
+<div class="strip"></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="top-row">
+      <div style="flex:1 1 380px">
+        <p class="eyebrow"><b></b> مكتبة نيني · دليل التشغيل الشخصي</p>
+        <h1>من الفكرة إلى <span>المشروع المنشور</span></h1>
+        <p class="lede">
+          المكتبة فيها <strong>210 أداة</strong>. هنا <strong>69 منها</strong> فقط — المهمة لكِ —
+          مرتّبة في خطة من <strong>7 مراحل</strong>: سكيلات، خوادم MCP، وأدوات، كل واحدة في مكانها ووقتها.
+        </p>
+      </div>
+      <div class="facts">
+        <div class="fact"><b>7</b><span>مراحل مرتّبة</span></div>
+        <div class="fact"><b>69</b><span>أداة مختارة</span></div>
+        <div class="fact"><b>16</b><span>خادم MCP</span></div>
+        <div class="fact"><b>0</b><span>دولار فوق اشتراك Claude</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="tabs">
+  <div class="wrap" role="tablist">
+    <button class="tab" role="tab" aria-selected="true"  data-panel="plan">الخطة الكاملة <small>7 مراحل</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="kit">العدّة <small>69</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="setup">يوم التركيب <small>6</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="recipes">الوصفات <small>4</small></button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="rules">القواعد</button>
+    <button class="tab" role="tab" aria-selected="false" data-panel="skip">تجاهليها</button>
+    <button class="tog" id="tog" type="button">فاتح</button>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ═══ الخطة ═══ -->
+<section class="panel" id="p-plan">
+  <div class="phead">
+    <h2>الخطة الكاملة — ماذا تستعملين، ومتى، وبأي ترتيب</h2>
+    <p class="sub">
+      كل المراحل السبع أمامك دفعة واحدة. داخل كل مرحلة الأدوات مرقّمة بترتيب التنفيذ،
+      وبجانب كل اسم نوعه: <span class="kind k-skill">سكيل</span>
+      <span class="kind k-mcp">MCP</span> <span class="kind k-cli">CLI</span>
+      <span class="kind k-tool">أداة</span> <span class="kind k-pack">حزمة</span>.
+      التفاصيل وأوامر التركيب في تبويب «العدّة».
+    </p>
+  </div>
+  <div class="board" id="board"></div>
+</section>
+
+<!-- ═══ العدّة ═══ -->
+<section class="panel" id="p-kit" hidden>
+  <div class="phead">
+    <h2>العدّة كاملة</h2>
+    <p class="sub">كل أداة مجانية أو مشمولة باشتراك Claude. صفّي بالنوع أو بالمجال، أو ابحثي بالعربي.</p>
+  </div>
+  <div class="controls">
+    <input id="q" type="search" placeholder="ابحثي: شعار، فيديو، دفع، تيشرت…" aria-label="بحث في العدّة">
+    <button class="chip" data-f="cat" data-v="all" aria-pressed="true">كل المجالات</button>
+    <button class="chip" data-f="cat" data-v="think"><i style="background:linear-gradient(to left,#514575,#a79dda)"></i>التفكير</button>
+    <button class="chip" data-f="cat" data-v="brand"><i style="background:linear-gradient(to left,#ffc451,#514575)"></i>الهوية</button>
+    <button class="chip" data-f="cat" data-v="web"><i style="background:linear-gradient(to left,#a79dda,#e58500)"></i>المواقع</button>
+    <button class="chip" data-f="cat" data-v="video"><i style="background:linear-gradient(to left,#e58500,#ffc451)"></i>الفيديو</button>
+    <button class="chip" data-f="cat" data-v="shop"><i style="background:linear-gradient(to left,#201d39,#a79dda)"></i>الملابس والبيع</button>
+    <span class="sep"></span>
+    <button class="chip" data-f="kind" data-v="all" aria-pressed="true">كل الأنواع</button>
+    <button class="chip" data-f="kind" data-v="skill">سكيل</button>
+    <button class="chip" data-f="kind" data-v="mcp">خادم MCP</button>
+    <button class="chip" data-f="kind" data-v="cli">CLI</button>
+    <button class="chip" data-f="kind" data-v="tool">أداة</button>
+    <button class="chip" data-f="kind" data-v="pack">حزمة</button>
+    <span class="count" id="count"></span>
+  </div>
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>لا توجد أداة بهذا الوصف. جرّبي كلمة أخرى.</p>
+</section>
+
+<!-- ═══ يوم التركيب ═══ -->
+<section class="panel" id="p-setup" hidden>
+  <div class="phead">
+    <h2>يوم التركيب: نصف ساعة، مرة واحدة</h2>
+    <p class="sub">ستة فقط. كل أمر ينسخ ويلصق في الترمنال وأنتِ داخل مجلد أي مشروع، ثم أغلقي Claude Code وافتحيه.</p>
+  </div>
+  <div class="two">
+    <div>
+      <div class="golden">
+        <div class="golden-in">
+          <span class="k">القاعدة</span>
+          <div>
+            <p><strong>لا تركّبي كل شيء.</strong> الخطأ الأول عند كل مبتدئ هو تركيب 30 سكيل في يوم واحد، فيتشتت الوكيل وتتشتتين معه.</p>
+            <p>الستة هنا أساسك الدائم. أي أداة أخرى في «العدّة» تركّبينها لحظة احتياجك لها فقط — والخطة تقول لك متى.</p>
+          </div>
+        </div>
+      </div>
+      <p class="sub" style="margin-bottom:1rem">
+        بعد هذه الستة، ارجعي لتبويب «الخطة» وركّبي من كل مرحلة ما تحتاجينه عند وصولك إليها.
+      </p>
+      <button class="reset" id="reset" type="button">تصفير القائمة</button>
+    </div>
+    <ul class="timeline" id="core"></ul>
+  </div>
+</section>
+
+<!-- ═══ الوصفات ═══ -->
+<section class="panel" id="p-recipes" hidden>
+  <div class="phead">
+    <h2>أربع وصفات تنسخينها كما هي</h2>
+    <p class="sub">كل خطوة فيها نص جاهز تلصقينه في Claude Code. نفّذي الوصفة حرفياً أول مرة، ثم عدّليها على ذوقك.</p>
+  </div>
+  <div class="recipes" id="recipes-list"></div>
+</section>
+
+<!-- ═══ القواعد ═══ -->
+<section class="panel" id="p-rules" hidden>
+  <div class="phead">
+    <h2>كيف تخلطين بينها</h2>
+    <p class="sub">ست قواعد تمنع أغلب الفوضى التي تحصل عند الخلط بين عدة سكيلات وخوادم.</p>
+  </div>
+  <div class="mix">
+    <div class="mixc">
+      <h4><span>01</span> سكيل واحد لكل رسالة</h4>
+      <p>لا تكتبي «استخدم brandkit و impeccable و copywriting» في طلب واحد. اطلبي واحداً، خذي مخرجه، ثم اطلبي الذي بعده وأعطيه المخرج السابق. هذه القاعدة وحدها تحل أغلب المشاكل.</p>
+    </div>
+    <div class="mixc"><h4><span>02</span> مجلد مستقل لكل مشروع</h4>
+      <p>السكيلات تقرأ وتكتب في المجلد الذي أنتِ فيه. مشروعان في مجلد واحد يعني هويتين مختلطتين وملفات ضائعة.</p></div>
+    <div class="mixc"><h4><span>03</span> السكيل يفكّر، والـ MCP يتصل</h4>
+      <p>الفرق باختصار: <b>السكيل</b> يعلّم Claude طريقة عمل (كيف يصمم، كيف يكتب). <b>خادم MCP</b> يوصله بخدمة خارجية (Figma، Stripe، متصفح، قاعدة بيانات). تحتاجين الاثنين لكن في لحظات مختلفة.</p></div>
+    <div class="mixc"><h4><span>04</span> الصورة قبل الكود، والنص قبل الشكل</h4>
+      <p>سكيل <code>image-to-code</code> يولّد صورة تصميم لكل قسم أولاً فتعتمدينها بعينك. واكتبي نصوص الصفحة قبل تصميمها — التصميم المبني على نص حقيقي يطلع صحيحاً من أول مرة.</p></div>
+    <div class="mixc"><h4><span>05</span> أعيدي التشغيل بعد كل تركيب</h4>
+      <p>أي <code>npx skills add</code> أو <code>claude mcp add</code> لا يظهر أثره حتى تغلقي Claude Code وتفتحيه. تأكدي بأمر <code>/mcp</code> أن الخادم ظاهر.</p></div>
+    <div class="mixc"><h4><span>06</span> اطلبي التوقف عند كل مرحلة</h4>
+      <p>أضيفي في نهاية كل طلب: «اعرض علي النتيجة قبل أن تكمل». يمنعك هذا من اكتشاف خطأ بعد أن يبني الوكيل عشر خطوات فوقه.</p></div>
+  </div>
+  <div class="flow">
+    <i>تفكير</i><em>←</em><i>هوية</i><em>←</em><i>نص</i><em>←</em><i>شكل</i><em>←</em><i>حركة</i><em>←</em><i>نشر</i><em>←</em><i>قياس</i>
+  </div>
+</section>
+
+<!-- ═══ تجاهليها ═══ -->
+<section class="panel" id="p-skip" hidden>
+  <div class="phead">
+    <h2>ما لا تحتاجينه الآن — ولماذا</h2>
+    <p class="sub">أدوات ممتازة في المكتبة لكنها ليست لك في هذه المرحلة. مذكورة حتى لا تضيّعي أسبوعاً في استكشافها.</p>
+  </div>
+  <div>
+    <div class="skipr"><b>Higgsfield · Runway · Pika · HeyGen · Descript · Lovart</b>
+      <span>أدوات صور وفيديو ممتازة لكنها كلها برصيد مدفوع فوق اشتراكك. الوصفة الثالثة تعطيك فيديو إعلانياً بدون أي منها.</span></div>
+    <div class="skipr"><b>Codex CLI · OpenCode · GLM · MiniMax · Claude Code Router</b>
+      <span>بدائل ونماذج أخرى. عندك Claude، وأضفت لك Gemini CLI مجاناً كوكيل ثانٍ — هذا يكفي تماماً.</span></div>
+    <div class="skipr"><b>Graphify · Caveman · Graft · LoopX</b>
+      <span>أدوات توفير التوكنز، وفائدتها تظهر في مشاريع برمجية ضخمة بآلاف الملفات. مشاريعك أصغر من أن تحتاجها.</span></div>
+    <div class="skipr"><b>AWS · Azure · Prisma · Neon · Docker · Sentry</b>
+      <span>بنية تحتية لفرق هندسية. مواقعك تُنشر على Vercel بأمر واحد، و Supabase يكفي لأي قاعدة بيانات تحتاجينها.</span></div>
+    <div class="skipr"><b>Cybersecurity · Scientific Agent Skills · TradingAgents · OpenBB · Career-Ops</b>
+      <span>مجالات كاملة بعيدة عنك: أمن، أبحاث علمية، تداول، توظيف. ممتازة — لكن لشخص آخر.</span></div>
+    <div class="skipr"><b>n8n · Zapier · Lindy · Blender MCP · Okara</b>
+      <span>أتمتة وثلاثي أبعاد وحملات مؤثرين. ارجعي لها بعد أن يكون عندك عملاء متكررون ومهام تتكرر أسبوعياً — الأتمتة تُبنى فوق روتين موجود، لا قبله.</span></div>
+  </div>
+</section>
+
+<footer>
+  <p style="margin:0">
+    جميع الأوامر منقولة حرفياً من بطاقات الوصفات في
+    <a href="https://maktaba-alpha.vercel.app/" target="_blank" rel="noopener">مكتبة سلمان</a>
+    كما كانت في 10 أغسطس 2026. إن تغيّر أمر، افتحي بطاقة الأداة في المكتبة وخذي النسخة المحدّثة.
+  </p>
+</footer>
+
+</main>
+
+<script>
+(function(){
+"use strict";
+
+var KINDS={skill:["k-skill","سكيل"],mcp:["k-mcp","MCP"],cli:["k-cli","CLI"],tool:["k-tool","أداة"],pack:["k-pack","حزمة"]};
+var TAGS={free:["t-free","مجاني"],key:["t-key","مفتاح مجاني"],plan:["t-plan","مع اشتراكك"]};
+
+/* ══════ الخطة: كل أداة في مرحلتها وبترتيبها ══════ */
+var PLAN=[
+ {n:"00", t:"التجهيز مرة واحدة", goal:"طبقة تحتية تركّبينها اليوم وتنسينها. تجعل كل ما بعدها أسهل وأرخص.", items:[
+   {name:"uv", k:"cli", d:"مدير حزم Python — لازم لتركيب بعض خوادم MCP"},
+   {name:"GitHub CLI", k:"cli", d:"نسخة احتياطية لكل مشروع، فلا تخسرين شغلك أبداً"},
+   {name:"best-claude-hud", k:"cli", d:"شريط يريك التكلفة والاستهلاك لحظياً — مهم بميزانية محدودة"},
+   {name:"Gemini CLI", k:"cli", d:"وكيل ثانٍ مجاني بـ 1000 طلب يومياً، توفّرين به رصيد Claude"},
+   {name:"Wispr Flow", k:"tool", d:"تتكلمين بالعربي فيكتب — أسرع بكثير من الكتابة اليدوية"},
+   {name:"claude-mem", k:"tool", d:"ذاكرة تحفظ أين وقفتِ بين الجلسات"}
+ ]},
+ {n:"01", t:"قبل: التفكير والبحث", goal:"لا تفتحي أي أداة تصميم قبل أن تنتهي هذه المرحلة. هنا يُوفَّر أطول وقت.", items:[
+   {name:"brainstorming", k:"skill", d:"حوار تصميمي من 9 خطوات يكشف افتراضاتك"},
+   {name:"Exa MCP", k:"mcp", d:"بحث ويب نظيف داخل المحادثة — لدراسة المنافسين"},
+   {name:"Trends MCP", k:"mcp", d:"ما الرائج فعلاً الآن في مجالك، ببيانات اليوم"},
+   {name:"marketing-psychology", k:"skill", d:"لمن تبيعين ولماذا يشترون"},
+   {name:"writing-plans", k:"skill", d:"حوّلي الحوار إلى خطة بمهام صغيرة"},
+   {name:"grill-me", k:"skill", d:"يستجوب خطتك ويكشف ثغراتها قبل التنفيذ"},
+   {name:"Notion MCP", k:"mcp", d:"تخزنين الخطة وتتابعينها"}
+ ]},
+ {n:"02", t:"أثناء: الهوية والنص", goal:"الهوية أولاً ثم النص. لا تصمّمي صفحة على نص وهمي.", items:[
+   {name:"brandkit", k:"skill", d:"لوحة هوية كاملة: شعارات وألوان وخطوط"},
+   {name:"banana-claude", k:"skill", d:"الصور والموك أب من وصف نصي"},
+   {name:"Figma MCP", k:"mcp", d:"إن صمّمتِ في Figma، يقرأ تصميمك ويحوّله كوداً"},
+   {name:"extract-design-system", k:"skill", d:"يسحب ألوان وخطوط أي موقع يعجبك"},
+   {name:"Google AI Studio", k:"tool", d:"مفتاح Gemini المجاني الذي يشغّل banana"},
+   {name:"copywriting", k:"skill", d:"نصوص تبيع، بعد أن يسألك عن جمهورك"},
+   {name:"copy-editing", k:"skill", d:"7 جولات تحرير تحفظ صوتك"},
+   {name:"humanizer", k:"skill", d:"يمسح 33 علامة للكتابة الآلية"}
+ ]},
+ {n:"03", t:"أثناء: الموقع والفيديو", goal:"الآن فقط تُبنى الواجهة، على هوية ونص جاهزين.", items:[
+   {name:"image-to-code", k:"skill", d:"صورة تصميم لكل قسم قبل الكود — ترينها بعينك"},
+   {name:"frontend-design", k:"skill", d:"سكيل Anthropic: يمنع الشكل المولّد المكرر"},
+   {name:"Context7 MCP", k:"mcp", d:"توثيق محدّث فيتوقف اختراع كود لا يعمل"},
+   {name:"Supabase MCP", k:"mcp", d:"إن احتجتِ قاعدة بيانات أو تسجيل دخول"},
+   {name:"hyperframes", k:"skill", d:"محرك الفيديو — ركّبيه قبل أي سكيل فيديو"},
+   {name:"product-launch-video", k:"skill", d:"فيديو إطلاق يُبنى إطاراً بإطار"},
+   {name:"Chatterbox", k:"tool", d:"تعليق صوتي عربي، محلي ومجاني بالكامل"},
+   {name:"motion-graphics", k:"skill", d:"كشف الشعار 8 ثوانٍ لنهاية كل إعلان"}
+ ]},
+ {n:"04", t:"بعد: التلميع والنشر", goal:"هنا يتحوّل «شغل مقبول» إلى «شغل يبدو احترافياً».", items:[
+   {name:"impeccable", k:"skill", d:"جولة تلميع على الخطوط والألوان والحركة"},
+   {name:"web-design-guidelines", k:"skill", d:"تدقيق بالملف والسطر على معايير Vercel"},
+   {name:"Chrome DevTools MCP", k:"mcp", d:"يفتح موقعك في متصفح حي ويفحصه بنفسه"},
+   {name:"Playwright MCP", k:"mcp", d:"يختبر الصفحات وينقر بدلاً عنك"},
+   {name:"deploy-to-vercel", k:"skill", d:"من مجلدك إلى رابط حي بأمر واحد"},
+   {name:"Vercel MCP", k:"mcp", d:"يدير النشر ويقرأ السجلات والتحليلات"},
+   {name:"GitHub MCP", k:"mcp", d:"يحفظ نسخك ويدير المستودعات بالكلام"},
+   {name:"website-to-video", k:"skill", d:"يحوّل الموقع إلى مقطع سوشال"}
+ ]},
+ {n:"05", t:"البيع والتشغيل", goal:"مرحلة ماركة الملابس: من صفحة جميلة إلى متجر يبيع فعلاً.", items:[
+   {name:"Shopify Dev MCP", k:"mcp", d:"إن بنيتِ متجرك على Shopify"},
+   {name:"Stripe MCP", k:"mcp", d:"المدفوعات والاشتراكات والفواتير بالمحادثة"},
+   {name:"PayPal MCP", k:"mcp", d:"بديل أو إضافة: فواتير PayPal وعمليات التاجر"},
+   {name:"Airtable MCP", k:"mcp", d:"جدول الطلبات والمخزون يديره الوكيل"},
+   {name:"Anthropic Skills", k:"pack", d:"فواتير وعروض Word و Excel و PDF حقيقية"},
+   {name:"GenOffice", k:"tool", d:"حزمة أوفيس مجانية تفتحين بها الملفات"},
+   {name:"Knowledge Work Plugins", k:"pack", d:"Claude كموظف مبيعات أو تسويق متخصص"}
+ ]},
+ {n:"06", t:"التطوير المستمر", goal:"شهرياً لا يومياً. قيسي ثم حسّني — ولا تعيدي البناء.", items:[
+   {name:"seo-audit", k:"skill", d:"خطة إصلاح مرتّبة من الأعلى أثراً"},
+   {name:"marketing-ideas", k:"skill", d:"3 أفكار مناسبة لمرحلتك لا 30 فكرة عامة"},
+   {name:"content-strategy", k:"skill", d:"خطة محتوى مبنية على طلب البحث الفعلي"},
+   {name:"redesign-existing-projects", k:"skill", d:"ترفعين التصميم بدون إعادة كتابة"},
+   {name:"find-skills", k:"skill", d:"يجد لك سكيلاً جديداً وقت الحاجة"},
+   {name:"Claude Skills Library", k:"pack", d:"340+ سكيل جاهز تختارين منه"}
+ ]}
+];
+
+var CORE=[
+ {n:"find-skills", why:"السكيل الذي يبحث لك عن السكيلات. ركّبيه أولاً حتى لا تعودي لتصفح 210 بطاقة يدوياً.",
+  c:"npx skills add https://github.com/vercel-labs/skills --skill find-skills"},
+ {n:"superpowers", why:"حزمة التفكير: عصف ذهني قبل البناء، وكتابة خطط، وتصحيح منهجي. هذه هي المرحلة صفر عندك.",
+  c:"npx skills add obra/superpowers"},
+ {n:"brandkit", why:"أولويتك الأولى: لوحة هوية بصرية كاملة — شعارات وألوان وخطوط — في جلسة واحدة.",
+  c:"npx skills add https://github.com/leonxlnx/taste-skill --skill brandkit"},
+ {n:"frontend-design", why:"سكيل Anthropic الرسمي: يمنع مواقعك من أن تبدو «مولّدة بالذكاء الاصطناعي».",
+  c:"npx skills add https://github.com/anthropics/skills --skill frontend-design"},
+ {n:"image-to-code", why:"يولّد صورة التصميم لكل قسم قبل الكود، فترين النتيجة بعينك. الأهم لكِ كمصمّمة بصرية.",
+  c:"npx skills add https://github.com/leonxlnx/taste-skill --skill image-to-code"},
+ {n:"copywriting", why:"النصوص التي تبيع. يسألك عن جمهورك وعرضك أولاً. تحتاجينه في المواقع والإعلانات والملابس معاً.",
+  c:"npx skills add https://github.com/coreyhaines31/marketingskills --skill copywriting"}
+];
+
+var TOOLS=[
+/* ── التفكير والتخطيط ── */
+{cat:"think",kind:"pack",core:1,name:"superpowers",tag:"free",job:"<b>حزمة التفكير الكاملة.</b> عصف ذهني من 9 خطوات قبل البناء، وكتابة خطط تنفيذ مفصّلة، وتصحيح منهجي.",cmd:"npx skills add obra/superpowers"},
+{cat:"think",kind:"skill",name:"brainstorming",tag:"free",job:"حوار تصميمي إجباري من 9 خطوات يكشف الافتراضات التي لم تفحصيها في فكرتك — <b>قبل</b> أي تنفيذ.",cmd:"npx skills add https://github.com/obra/superpowers --skill brainstorming"},
+{cat:"think",kind:"skill",name:"writing-plans",tag:"free",job:"يحوّل فكرتك إلى خطة من مهام صغيرة (2–5 دقائق لكل مهمة) بملفات وأوامر محددة.",cmd:"npx skills add https://github.com/obra/superpowers --skill writing-plans"},
+{cat:"think",kind:"skill",name:"grill-me",tag:"free",job:"يقلب الأدوار: بدل أن يوافق على خطتك، <b>يستجوبك بأسئلة منهجية</b> حتى تظهر الثغرات قبل التنفيذ.",cmd:"npx skills add https://github.com/mattpocock/skills --skill grill-me"},
+{cat:"think",kind:"skill",name:"ultraplan",tag:"free",job:"بديل أعمق لكتابة الخطط: يستجوبك عن هدفك، يستكشف مشروعك، ويسلّمك خطة مربوطة بملفاتك الحقيقية.",cmd:"npx skills add 6missedcalls/ultraplan"},
+{cat:"think",kind:"skill",core:1,name:"find-skills",tag:"free",job:"<b>اسألي بالعربي «فيه سكيل يسوي كذا؟»</b> فيبحث في منظومة السكيلات المفتوحة ويركّب الأنسب.",cmd:"npx skills add https://github.com/vercel-labs/skills --skill find-skills"},
+{cat:"think",kind:"pack",name:"Claude Skills Library",tag:"free",job:"مستودع فيه أكثر من 340 سكيلاً جاهزاً في 18 مجالاً — هندسة، تسويق، منتجات — تختارين منه ما يلزمك.",cmd:"/plugin marketplace add alirezarezvani/claude-skills"},
+{cat:"think",kind:"tool",name:"claude-mem",tag:"free",job:"ذاكرة دائمة: يلخّص كل جلسة ويعيد السياق في الجلسة القادمة، فلا تشرحين مشروعك من الصفر كل مرة.",cmd:"npx claude-mem install"},
+{cat:"think",kind:"skill",name:"teach",tag:"free",job:"معلّم خاص يتذكر أين وصلتِ. أنتِ جديدة في الذكاء الاصطناعي — هذا مسار تعلّمك المنظم.",cmd:"npx skills add https://github.com/mattpocock/skills --skill teach",note:"يكتب ملفات في المجلد الحالي — خصّصي له مجلداً منفصلاً."},
+{cat:"think",kind:"mcp",name:"Context7 MCP",tag:"free",job:"يسحب التوثيق المحدّث لأي مكتبة برمجية، فيتوقف الوكيل عن اختراع كود لا يعمل. أضيفي <b>use context7</b> في نهاية طلبك.",cmd:"claude mcp add --scope user context7 -- npx -y @upstash/context7-mcp"},
+{cat:"think",kind:"mcp",name:"Exa MCP",tag:"free",job:"بحث ويب عالي الجودة وجلب صفحات كاملة كنص نظيف — <b>يشتغل فوراً بدون أي مفتاح</b>.",cmd:"claude mcp add --transport http exa https://mcp.exa.ai/mcp"},
+{cat:"think",kind:"mcp",name:"Notion MCP",tag:"free",job:"Claude يرتب خططك ومهامك وملاحظاتك في Notion: يبحث في صفحاتك، ينشئ قواعد بيانات، ويحدّث المهام.",cmd:"claude mcp add --transport http notion https://mcp.notion.com/mcp"},
+{cat:"think",kind:"cli",name:"Gemini CLI",tag:"free",job:"<b>وكيل ثانٍ مجاني بالكامل</b> من Google في طرفيتك: 60 طلباً بالدقيقة و1000 يومياً بحساب Google شخصي. استعمليه للمهام الطويلة وتوفّرين رصيد Claude.",cmd:"npm install -g @google/gemini-cli"},
+{cat:"think",kind:"cli",name:"uv",tag:"free",job:"مدير حزم Python فائق السرعة. <b>تحتاجينه قبل عدة خوادم MCP</b> في هذه القائمة (أي أمر فيه uvx).",cmd:"curl -LsSf https://astral.sh/uv/install.sh | sh"},
+{cat:"think",kind:"cli",name:"best-claude-hud",tag:"free",job:"شريط حالة يعرض النموذج واستهلاك السياق <b>والتكلفة لحظياً</b>. بميزانية 20 دولاراً، هذا يمنع المفاجآت.",cmd:"npm install -g best-claude-hud@latest"},
+{cat:"think",kind:"cli",name:"MarkItDown",tag:"free",job:"يحوّل PDF و Word و Excel و PowerPoint والصور إلى Markdown نظيف يفهمه النموذج أسرع وبتوكنز أقل بكثير.",cmd:"pip install 'markitdown[all]'"},
+{cat:"think",kind:"tool",name:"Wispr Flow",tag:"free",job:"إملاء صوتي: <b>تتكلمين بالعربي فيكتب نصاً نظيفاً</b> في أي تطبيق، بكشف تلقائي لأكثر من 100 لغة. أسرع بكثير من الكتابة.",cmd:"حمّلي التطبيق من wisprflow.ai",note:"2000 كلمة أسبوعياً مجاناً على الماك — تكفي للاستعمال اليومي المعتاد."},
+
+/* ── الهوية البصرية ── */
+{cat:"brand",kind:"skill",core:1,name:"brandkit",tag:"free",job:"<b>هوية بصرية كاملة من جلسة واحدة:</b> مفاهيم شعارات عبر 5 طرق، لوحات ألوان وخطوط، وعرض نظام بصري، بأكثر من 10 أنماط.",cmd:"npx skills add https://github.com/leonxlnx/taste-skill --skill brandkit"},
+{cat:"brand",kind:"tool",name:"Claude Design",tag:"plan",job:"لوحة تصميم من Anthropic على <b>claude.ai/design</b>: تصاميم كاملة وصفحات هبوط وعروض، وتصدير PPTX و PDF و HTML. <b>مشمولة باشتراكك، وبلا أي تركيب.</b>",cmd:"افتحي claude.ai/design من المتصفح"},
+{cat:"brand",kind:"skill",name:"banana-claude",tag:"key",job:"يحوّل Claude إلى مدير إبداعي لنماذج Nano Banana من Google: يكتب برومبتات الصور نيابة عنك. للموك أب وصور المنتجات.",cmd:"/plugin marketplace add AgriciDaniel/banana-claude",cmd2:"/plugin install banana-claude@banana-claude-marketplace",note:"يحتاج مفتاح Gemini مجاني من Google AI Studio — دقيقتان بحساب Google."},
+{cat:"brand",kind:"tool",name:"Google AI Studio",tag:"free",job:"من هنا تأخذين <b>مفتاح Gemini المجاني</b> الذي يشغّل banana-claude. وفيه وضع Build يحوّل وصفك إلى تطبيق يعمل.",cmd:"افتحي aistudio.google.com"},
+{cat:"brand",kind:"mcp",name:"Figma MCP",tag:"free",job:"إن صمّمتِ في Figma: يحوّل تصاميمك إلى سياق يقرؤه الوكيل فيبني كوداً مطابقاً للتصميم، ويقدر يكتب على اللوحة أيضاً.",cmd:"claude mcp add --transport http figma https://mcp.figma.com/mcp",note:"مجاني في مرحلة البيتا حالياً."},
+{cat:"brand",kind:"skill",name:"extract-design-system",tag:"free",job:"يعجبك موقع؟ يستخرج ألوانه وخطوطه ومسافاته وظلاله ويصدّرها JSON و CSS كنقطة بداية لنظام تصميمك.",cmd:"npx skills add https://github.com/arvindrk/extract-design-system --skill extract-design-system"},
+{cat:"brand",kind:"mcp",name:"Canva MCP",tag:"free",job:"تصميم وتعديل وتصدير داخل Canva بالحوار من Claude. مفيد للمنشورات السريعة على السوشال.",cmd:"claude mcp add --transport http canva https://mcp.canva.com/mcp"},
+{cat:"brand",kind:"tool",name:"Open Design",tag:"free",job:"يحوّل وكيل البرمجة عندك إلى محرك تصميم: نماذج ومواقع وعروض تقديمية، <b>مع تصدير حقيقي PDF و PPTX و MP4</b>.",cmd:"od mcp install claude"},
+{cat:"brand",kind:"tool",name:"HTML Anything",tag:"free",job:"محرر تصميم يعمل محلياً: يسلّم نصك أو بياناتك لـ Claude Code ويعيد تصميماً جاهزاً في ملف HTML واحد، بـ 75 قالباً.",cmd:"git clone https://github.com/nexu-io/html-anything && cd html-anything && pnpm install && pnpm -F @html-anything/next dev"},
+{cat:"brand",kind:"tool",name:"Pomelli",tag:"free",job:"تجربة مجانية من Google Labs: تعطينها رابط موقعك فتبني هوية تسويقية كاملة وتقترح حملات وتولّد تصاميم متوافقة.",cmd:"افتحي labs.google.com/pomelli",note:"بالإنجليزية فقط، وبحدود 300 صورة شهرياً."},
+{cat:"brand",kind:"tool",name:"YouMind Prompts",tag:"free",job:"أكثر من 30,000 برومبت صور وفيديو مجاني ومحدّث يومياً، وكل نتيجة معروضة مع النص الذي ولّدها. مرجعك حين لا تعرفين كيف تصفين ما تريدين.",cmd:"افتحي youmind.com/prompts"},
+
+/* ── المواقع ── */
+{cat:"web",kind:"skill",core:1,name:"frontend-design",tag:"free",job:"<b>سكيل Anthropic الرسمي.</b> خطوط وألوان وحركة وتكوين مقصودة، بعيداً عن الشكل العام للمواقع المولّدة. المخرج كود شغّال.",cmd:"npx skills add https://github.com/anthropics/skills --skill frontend-design"},
+{cat:"web",kind:"skill",core:1,name:"image-to-code",tag:"free",job:"<b>يقلب ترتيب البناء:</b> يولّد صورة تصميم مرجعية لكل قسم قبل كتابة أي كود، ثم يكتب الواجهة مطابقة لها وفق 38 توجيهاً تصميمياً.",cmd:"npx skills add https://github.com/leonxlnx/taste-skill --skill image-to-code"},
+{cat:"web",kind:"skill",name:"ui-ux-pro-max",tag:"free",job:"قاعدة بيانات ذوق: أكثر من 50 نمط تصميم، 161 لوحة ألوان، 57 توليفة خطوط، 99 قاعدة تجربة استخدام.",cmd:"npx skills add https://github.com/nextlevelbuilder/ui-ux-pro-max-skill --skill ui-ux-pro-max"},
+{cat:"web",kind:"skill",name:"impeccable",tag:"free",job:"جولة التلميع النهائية: يحسّن الخطوط والألوان والتخطيط والحركة، مع فحص التباين. استعمليه في المرحلة 04 دائماً.",cmd:"npx skills add https://github.com/pbakaus/impeccable --skill impeccable"},
+{cat:"web",kind:"skill",name:"web-design-guidelines",tag:"free",job:"يدقّق موقعك على معايير Vercel ويرجع الملاحظات <b>باسم الملف ورقم السطر</b> — تصميم ووصولية وتجربة استخدام.",cmd:"npx skills add https://github.com/vercel-labs/agent-skills --skill web-design-guidelines"},
+{cat:"web",kind:"skill",name:"anti-ui-slop",tag:"free",job:"يربط قرارات التصميم بمكتبة تضم أكثر من 800,000 شاشة حقيقية، فتتوقف واجهاتك عن الشبه بكل ما يولّده الذكاء الاصطناعي.",cmd:"npx skills add https://uizze.com/"},
+{cat:"web",kind:"pack",name:"jakubkrehel/skills",tag:"free",job:"8 سكيلات من مهندس تصميم: ألوان، خطوط، تخطيط، وصولية، ونصوص الواجهة — مع سكيل مراجعة يفحص صفحتك.",cmd:"npx skills add jakubkrehel/skills --skill '*'"},
+{cat:"web",kind:"skill",name:"redesign-existing-projects",tag:"free",job:"عندك موقع شغّال وتريدين رفع مستواه بدون إعادة كتابته؟ يدقّقه ويرفعه إلى مستوى أفخم مع الحفاظ على وظائفه.",cmd:"npx skills add https://github.com/leonxlnx/taste-skill --skill redesign-existing-projects"},
+{cat:"web",kind:"skill",name:"deploy-to-vercel",tag:"free",job:"من مجلد على جهازك إلى رابط حي على الإنترنت بأمر واحد، ويرجع لك رابط المعاينة.",cmd:"npx skills add https://github.com/vercel-labs/agent-skills --skill deploy-to-vercel"},
+{cat:"web",kind:"mcp",name:"Vercel MCP",tag:"free",job:"بعد النشر: يدير مشاريعك وعمليات النشر، يحلل سجلات الأخطاء، ويقرأ تحليلات الزيارات — من داخل المحادثة بدل لوحة التحكم.",cmd:"claude mcp add --transport http vercel https://mcp.vercel.com"},
+{cat:"web",kind:"mcp",name:"Chrome DevTools MCP",tag:"free",job:"<b>عيون ويدان داخل متصفح Chrome حي:</b> يفتح موقعك، يفحص العناصر، يقرأ أخطاء الـ console، ويحلل السرعة. الطريقة الاحترافية لإصلاح موقع.",cmd:"claude mcp add chrome-devtools --scope user npx chrome-devtools-mcp@latest"},
+{cat:"web",kind:"mcp",name:"Playwright MCP",tag:"free",job:"يعطي Claude متصفحاً حقيقياً يفتح موقعك وينقر ويعبّي النماذج — فيفحص شغله بنفسه بدل أن تفحصيه أنتِ.",cmd:"claude mcp add playwright npx @playwright/mcp@latest"},
+{cat:"web",kind:"mcp",name:"Supabase MCP",tag:"free",job:"إن احتاج موقعك قاعدة بيانات أو تسجيل دخول: تديرينها بالوصف الطبيعي، والاتصال الأول يفتح OAuth بدون نسخ مفاتيح.",cmd:"claude mcp add --scope project --transport http supabase \"https://mcp.supabase.com/mcp\""},
+{cat:"web",kind:"mcp",name:"GitHub MCP",tag:"free",job:"يربط وكيلك بمستودعاتك: يحفظ نسخك، ويدير القضايا وطلبات الدمج بالكلام الطبيعي بدل التنقل اليدوي.",cmd:"claude mcp add --transport http github https://api.githubcopilot.com/mcp -H \"Authorization: Bearer YOUR_GITHUB_PAT\"",note:"ضعي رمز GitHub الشخصي مكان YOUR_GITHUB_PAT."},
+{cat:"web",kind:"cli",name:"GitHub CLI",tag:"free",job:"<b>شبكة أمانك.</b> نسخة احتياطية من كل مشروع بأمر واحد، فلا تخسرين شغل أسبوع بخطأ واحد.",cmd:"brew install gh"},
+{cat:"web",kind:"tool",name:"Claude Directory",tag:"free",job:"546 تصميم واجهات جاهزاً: كل بطاقة فيها زر لنسخ البرومبت وزر لتحميل الكود مع فيديو للنتيجة. مرجعك البصري قبل أي مشروع.",cmd:"افتحي pulkit.page/claude-directory"},
+{cat:"web",kind:"tool",name:"Google Stitch",tag:"free",job:"تصميم شاشات موبايل وويب عالية الدقة من وصف نصي أو صورة، وتصدير HTML و CSS نظيف تسلّمينه لـ Claude Code.",cmd:"افتحي stitch.withgoogle.com",note:"مجاني بحساب Google، بحدود 350 توليدة شهرياً تقريباً."},
+
+/* ── الفيديو ── */
+{cat:"video",kind:"skill",name:"hyperframes",tag:"free",job:"<b>أساس منظومة الفيديو — ركّبيه أولاً.</b> يبني الفيديو كصفحة ويب بخطوط زمنية GSAP: عناوين متحركة، ترجمات متزامنة، انتقالات.",cmd:"npx skills add https://github.com/heygen-com/hyperframes --skill hyperframes"},
+{cat:"video",kind:"skill",name:"product-launch-video",tag:"free",job:"فيديو إطلاق منتجك يُبنى إطاراً بإطار: يلتقط تفاصيل المنتج وهويته، يخطط المحتوى، ثم يبني الحركة.",cmd:"npx skills add https://github.com/heygen-com/hyperframes --skill product-launch-video",note:"يحتاج hyperframes مركّباً قبله."},
+{cat:"video",kind:"skill",name:"faceless-explainer",tag:"free",job:"يحوّل أي نص أو مقال إلى فيديو شرح بدون وجه ولا تصوير: يختار نظام التصميم، يبني السرد، ثم يركّب الفيديو.",cmd:"npx skills add https://github.com/heygen-com/hyperframes --skill faceless-explainer",note:"يحتاج hyperframes مركّباً قبله."},
+{cat:"video",kind:"skill",name:"motion-graphics",tag:"free",job:"مقاطع موشن جرافيك تحت 10 ثوانٍ بدون تعليق صوتي. الاستعمال الأهم لكِ: <b>كشف الشعار</b> في نهاية كل إعلان.",cmd:"npx skills add https://github.com/heygen-com/hyperframes --skill motion-graphics",note:"يحتاج hyperframes مركّباً قبله."},
+{cat:"video",kind:"skill",name:"website-to-video",tag:"free",job:"يلتقط موقعك ويحوّله إلى مقطع جاهز لمنصات التواصل أو جولة داخل الموقع، عبر 7 خطوات بمحطات موافقة.",cmd:"npx skills add https://github.com/heygen-com/hyperframes --skill website-to-video",note:"يحتاج hyperframes مركّباً قبله."},
+{cat:"video",kind:"skill",name:"video-shotcraft",tag:"free",job:"مخرج فيديوهات منتجات على محرك Remotion: 152 بطاقة لقطات و209 معاينة حركة، ويصدّر 1080p قابلاً للتعديل.",cmd:"npx skills add Vincentwei1021/video-shotcraft",note:"يحتاج Node 22 مع Chromium — للمرحلة المتقدمة."},
+{cat:"video",kind:"tool",name:"Chatterbox",tag:"free",job:"<b>صوت عربي مجاني بالكامل ومحلي:</b> نموذج مفتوح المصدر يدعم 23 لغة بينها العربية، يستنسخ صوتك من عينة 10 ثوانٍ، ولا تغادر بياناتك جهازك.",cmd:"pip install chatterbox-tts"},
+{cat:"video",kind:"mcp",name:"ElevenLabs MCP",tag:"key",job:"بديل سحابي للتعليق الصوتي: أصوات طبيعية جداً، واستنساخ أصوات، وتفريغ ملفات — من داخل المحادثة.",cmd:"claude mcp add elevenlabs -e ELEVENLABS_API_KEY=YOUR_KEY -- uvx elevenlabs-mcp",note:"10,000 كريدت مجانية شهرياً. يحتاج uv مركّباً. ضعي مفتاحك مكان YOUR_KEY."},
+{cat:"video",kind:"skill",name:"text-to-lottie",tag:"free",job:"رسوم متحركة خفيفة من وصف نصي (أيقونة تُرسم، علامة صح). الناتج JSON قياسي يعمل على الويب والموبايل.",cmd:"npx skills add diffusionstudio/lottie"},
+{cat:"video",kind:"skill",name:"humanizer",tag:"free",job:"يكشف 33 علامة للكتابة الآلية ويزيلها من سكربتاتك وبوستاتك، فتبدو مكتوبة بيدك مع الحفاظ على الحقائق وصوتك.",cmd:"npx skills add blader/humanizer --global"},
+
+/* ── الملابس والبيع ── */
+{cat:"shop",kind:"skill",name:"marketing-psychology",tag:"free",job:"أكثر من 50 نموذجاً ذهنياً يفسّر لماذا يشتري عميلك: الدليل الاجتماعي، الخوف من الخسارة، نفسية التسعير. تستعملينه في المرحلة 01.",cmd:"npx skills add https://github.com/coreyhaines31/marketingskills --skill marketing-psychology"},
+{cat:"shop",kind:"skill",core:1,name:"copywriting",tag:"free",job:"<b>نصوص موجّهة للتحويل</b> للصفحة الرئيسية وصفحات الهبوط والتسعير. يجمع سياق الجمهور والمنتج أولاً، بإطار خاص لكل نوع صفحة.",cmd:"npx skills add https://github.com/coreyhaines31/marketingskills --skill copywriting"},
+{cat:"shop",kind:"skill",name:"copy-editing",tag:"free",job:"7 جولات تحرير متتابعة تفحص الوضوح والإثبات والصدى العاطفي — دون أن يعيد كتابة نصك أو يفقده صوتك.",cmd:"npx skills add https://github.com/coreyhaines31/marketingskills --skill copy-editing"},
+{cat:"shop",kind:"skill",name:"marketing-ideas",tag:"free",job:"<b>لا يعطيك قائمة أفكار طويلة.</b> يقيّم منتجك وجمهورك وميزانيتك، ثم يرجع بالأفكار الثلاث الأنسب فقط من مكتبة 139 تكتيكاً.",cmd:"npx skills add https://github.com/coreyhaines31/marketingskills --skill marketing-ideas"},
+{cat:"shop",kind:"skill",name:"content-strategy",tag:"free",job:"خطة محتوى مبنية على طلب البحث الفعلي لا على التخمين: ركائز مأخوذة من احتياجات جمهورك.",cmd:"npx skills add https://github.com/coreyhaines31/marketingskills --skill content-strategy"},
+{cat:"shop",kind:"skill",name:"seo-audit",tag:"free",job:"تدقيق كامل للظهور في البحث، ويسلّمك خطة إصلاح <b>مرتبة من الأعلى أثراً إلى الأقل</b> حسب نوع موقعك.",cmd:"npx skills add https://github.com/coreyhaines31/marketingskills --skill seo-audit"},
+{cat:"shop",kind:"mcp",name:"Shopify Dev MCP",tag:"free",job:"إن بنيتِ متجر ملابس على Shopify: توثيق حي ومخططات Admin GraphQL داخل الوكيل، بدون تسجيل دخول ولا مفاتيح.",cmd:"claude mcp add --transport stdio shopify-dev-mcp -- npx -y @shopify/dev-mcp@latest"},
+{cat:"shop",kind:"mcp",name:"Stripe MCP",tag:"free",job:"<b>المدفوعات.</b> وكيلك ينادي Stripe بأكثر من 100 طريقة: المدفوعات والعملاء والاشتراكات والفواتير، ويبحث في توثيقها.",cmd:"claude mcp add --transport http stripe https://mcp.stripe.com/",note:"الخادم مجاني، ورسوم Stripe المعتادة على المعاملات فقط."},
+{cat:"shop",kind:"mcp",name:"PayPal MCP",tag:"free",job:"بديل أو إضافة لـ Stripe: إنشاء الفواتير وعرضها وكتالوج أوسع من أدوات التاجر بلغة طبيعية.",cmd:"npx -y @paypal/mcp --tools=all",note:"يتطلب حساب تاجر أو مطوّر PayPal."},
+{cat:"shop",kind:"mcp",name:"Airtable MCP",tag:"free",job:"<b>جدول الطلبات والمخزون.</b> وكيلك يبحث في قواعدك وينشئ السجلات ويحدّثها ويدير الأتمتة — بنفس صلاحياتك لا أكثر.",cmd:"claude mcp add --transport http airtable https://mcp.airtable.com/mcp"},
+{cat:"shop",kind:"pack",name:"Anthropic Skills",tag:"free",job:"<b>حزمة المستندات الرسمية:</b> ينشئ ملفات Word و Excel و PowerPoint و PDF حقيقية بتنسيق سليم — للفواتير وعروض العملاء.",cmd:"/plugin marketplace add anthropics/skills",cmd2:"/plugin install document-skills@anthropic-agent-skills"},
+{cat:"shop",kind:"pack",name:"Knowledge Work Plugins",tag:"free",job:"حزم Anthropic الرسمية تجهّز Claude لوظائف كاملة: مبيعات، تسويق، قانوني، مالية — سكيلات وأوامر ووكلاء لكل تخصص.",cmd:"claude plugin marketplace add anthropics/knowledge-work-plugins",cmd2:"claude plugin install sales@knowledge-work-plugins"},
+{cat:"shop",kind:"tool",name:"GenOffice",tag:"free",job:"حزمة أوفيس مجانية مفتوحة المصدر بدون إعلانات: محرر .docx وجداول .xlsx وعروض وأداة PDF، تفتحين بها ملفات الفواتير والعروض.",cmd:"حمّليها من genspark.ai/genoffice"},
+{cat:"shop",kind:"mcp",name:"Trends MCP",tag:"free",job:"بيانات ترند حية من أكثر من 25 منصة (TikTok و Reddit و YouTube و Google): «ما الرائج الآن في مجالي؟» فيجيب ببيانات اليوم لا بذاكرة قديمة.",cmd:"أضيفي https://www.trendsmcp.ai/mcp كموصل في إعدادات Claude",note:"100 طلب شهرياً مجاناً — تكفي لمراجعة أسبوعية."}
+];
+
+var RECIPES=[
+ {t:"هوية بصرية كاملة",m:"90 دقيقة",tools:"brainstorming · brandkit · banana-claude",steps:[
+  {t:"افهمي العلامة قبل أن ترسميها",d:"لا تفتحي أي أداة رسم. دعي السكيل يستجوبك عن الجمهور والوعد والنبرة.",
+   p:"استخدم سكيل brainstorming: أريد بناء هوية بصرية لماركة ملابس نسائية بسيطة عصرية، خذني في حوار التصميم كاملاً قبل أي تنفيذ، واسألني عن الجمهور والوعد والنبرة."},
+  {t:"ولّدي لوحة الهوية",d:"مفاهيم شعارات عبر 5 طرق، ولوحات ألوان وخطوط، وعرض نظام بصري كامل.",
+   p:"استخدم سكيل brandkit: ابنِ لوحة هوية بصرية كاملة للماركة التي اتفقنا عليها، بمفاهيم شعارات ولوحة ألوان وخطوط، وأعطني 3 اتجاهات بصرية مختلفة قبل أن أختار."},
+  {t:"اختاري اتجاهاً واحداً وعمّقيه",d:"لا تخلطي بين اتجاهين. اختاري واحداً واطلبي توسيعه.",
+   p:"اعتمدت الاتجاه الثاني. وسّعه إلى نظام بصري كامل: تدرجات الألوان، مقاسات الخطوط، المسافات، وشكل الأزرار والبطاقات. صدّره في ملف واحد أرجع له في كل مشروع."},
+  {t:"طبّقيها على مواد حقيقية",d:"الهوية لا تُحكم عليها في لوحة، بل على منتج.",
+   p:"استخدم سكيل banana-claude: طبّق الهوية التي بنيناها على 5 موك أب: تيشرت أبيض، كيس تغليف، بطاقة شكر، منشور إنستغرام، وواجهة متجر."}
+ ]},
+ {t:"موقع أو صفحة هبوط",m:"نصف يوم",tools:"copywriting · image-to-code · impeccable · deploy-to-vercel",steps:[
+  {t:"النص أولاً — دائماً",d:"التصميم المبني على نص حقيقي يطلع صحيحاً من أول مرة.",
+   p:"استخدم سكيل copywriting: اكتب نص صفحة هبوط لماركة ملابسي، اسألني أولاً عن الجمهور والعرض والسعر ثم اكتب النسخة كاملة بالعربي."},
+  {t:"صوّري التصميم قبل أن يُبنى",d:"يولّد صورة لكل قسم، تعتمدينها بعينك، ثم يكتب الكود مطابقاً لها.",
+   p:"استخدم سكيل image-to-code: ابنِ صفحة الهبوط بالنص الذي كتبناه وبهوية الماركة التي اعتمدناها. ولّد صورة التصميم لكل قسم أولاً واعرضها علي قبل كتابة أي كود."},
+  {t:"جولة التلميع",d:"هنا الفرق بين «مقبول» و«يبدو احترافياً».",
+   p:"استخدم سكيل impeccable: راجع الصفحة وحسّن الخطوط والألوان والتباعد والحركة حتى تصل لمستوى منتج حقيقي، واشرح لي كل تغيير ولماذا."},
+  {t:"دعيه يفحص بنفسه",d:"خادم Chrome DevTools يفتح الصفحة ويقرأ الأخطاء الحقيقية.",
+   p:"افتح الموقع في Chrome عبر خادم chrome-devtools، افحص أخطاء الـ console وسرعة التحميل، وأصلح ما تجده ثم أعد الفحص."},
+  {t:"انشري",d:"من جهازك إلى رابط حي.",
+   p:"استخدم سكيل deploy-to-vercel: انشر هذا المشروع على Vercel بالطريقة الأنسب وأعطني رابط المعاينة."}
+ ]},
+ {t:"فيديو إعلاني 30 ثانية",m:"ساعتان",tools:"hyperframes · product-launch-video · Chatterbox · motion-graphics",steps:[
+  {t:"ركّبي الأساس مرة واحدة",d:"hyperframes هو المحرك؛ البقية تعمل فوقه.",
+   cmd:"npx skills add https://github.com/heygen-com/hyperframes --skill hyperframes"},
+  {t:"اكتبي السكربت ونظّفيه",d:"سكربت يبدو مكتوباً بيد إنسان، لا بيد نموذج.",
+   p:"اكتب سكربت فيديو إعلاني 30 ثانية لماركة ملابسي، بهوك في أول 3 ثوانٍ ونداء واضح في النهاية. ثم استخدم سكيل humanizer لتنظيفه من أي علامات كتابة آلية."},
+  {t:"سجّلي التعليق الصوتي مجاناً",d:"Chatterbox يدعم العربية ويعمل محلياً على جهازك بلا أي تكلفة.",
+   p:"استخدم chatterbox لتوليد تعليق صوتي عربي للسكربت بصوت هادئ واضح، وصدّره ملفاً صوتياً جاهزاً للتركيب."},
+  {t:"ابني الفيديو إطاراً بإطار",d:"اطلبي الستوري بورد قبل البناء — يوفر عليك إعادة العمل.",
+   p:"استخدم سكيل product-launch-video: ابنِ فيديو إطلاق لماركة ملابسي بالسكربت والتعليق الصوتي اللذين جهّزناهما وهوية الماركة المعتمدة. اعرض علي الستوري بورد أولاً قبل أن تكمل البناء."},
+  {t:"اختمي بكشف الشعار",d:"8 ثوانٍ من الموشن جرافيك تُستعمل في نهاية كل إعلان لاحق.",
+   p:"استخدم سكيل motion-graphics: ابنِ مقطع 8 ثوانٍ لكشف شعار الماركة بدون تعليق صوتي، بنفس ألوان الهوية، واعرض علي الإخراج النهائي للاعتماد."}
+ ]},
+ {t:"ماركة تيشرتات من الصفر",m:"أسبوع",tools:"marketing-psychology · brandkit · Airtable MCP · Stripe MCP",steps:[
+  {t:"لمن تبيعين ولماذا يشترون",d:"قبل أي تصميم. هذه الخطوة تحدد كل ما بعدها.",
+   p:"استخدم سكيل marketing-psychology: أبدأ ماركة تيشرتات مطبوعة بميزانية صغيرة، اسألني عما تحتاجه ثم اقترح 3 مبادئ نفسية تناسب جمهوري واشرح كيف أطبق كل مبدأ بمثال."},
+  {t:"هوية الماركة",d:"نفّذي الوصفة الأولى كاملة هنا، ثم عودي.",
+   p:"استخدم سكيل brandkit: ابنِ لوحة هوية بصرية كاملة لماركة تيشرتات مطبوعة تخاطب الجمهور الذي حددناه، وأعطني 3 اتجاهات قبل أن أختار."},
+  {t:"تصاميم الطباعة والموك أب",d:"صمّمي المطبوعة، ثم اعرضيها على تيشرت حقيقي قبل الطباعة.",
+   p:"استخدم سكيل banana-claude: صمّم 6 تصاميم طباعة للتيشرت بأسلوب الهوية المعتمدة، ثم اعرض كل تصميم على موك أب تيشرت أبيض وأسود بإضاءة استوديو."},
+  {t:"صفحة البيع",d:"ارجعي للوصفة الثانية ونفّذيها كاملة على الماركة، ثم عودي إلى هنا."},
+  {t:"جهّزي الطلبات والدفع",d:"هنا تدخل خوادم MCP: جدول يتتبع الطلبات، وبوابة تستقبل المال.",
+   p:"أنشئ في Airtable قاعدة لطلبات متجري فيها: رقم الطلب، اسم العميل، المقاس، التصميم، الحالة، وتاريخ الشحن. ثم اربط Stripe لإنشاء روابط دفع لكل منتج."},
+  {t:"أول 3 تحركات تسويقية",d:"ثلاث أفكار مناسبة لمرحلتك — لا ثلاثين فكرة عامة.",
+   p:"استخدم سكيل marketing-ideas: منتجي ماركة تيشرتات مطبوعة، ما زلت في البداية بميزانية صغيرة وبدون جمهور. اسألني عما ينقصك ثم أعطني الأفكار الثلاث الأنسب فقط مع خطوات تنفيذ كل واحدة."},
+  {t:"بعد الإطلاق بشهر",d:"قيسي، ثم حسّني. لا تعيدي البناء.",
+   p:"استخدم سكيل seo-audit: دقق متجري وأخرج لي خطة إصلاحات مرتبة من الأعلى أثراً إلى الأقل، مع سبب كل إصلاح."}
+ ]}
+];
+
+var CATWORDS={
+ think:"تفكير تخطيط خطة أفكار عصف ذهني تعلم ذاكرة بحث صوت إملاء تكلفة",
+ brand:"هوية بصرية شعار لوجو ألوان خطوط علامة تجارية براند تصميم موك أب صور",
+ web:"موقع مواقع ويب صفحة هبوط واجهة تصميم نشر استضافة قاعدة بيانات فحص",
+ video:"فيديو فيديوهات إعلان إعلانية مونتاج موشن حركة صوت تعليق ريلز",
+ shop:"ملابس تيشرت تيشرتات طباعة ماركة متجر بيع تسويق محتوى سوشال عملاء دفع فواتير طلبات مخزون"
+};
+
+function el(t,c){var e=document.createElement(t); if(c) e.className=c; return e;}
+function kindTag(k){var s=el("span","kind "+KINDS[k][0]); s.textContent=KINDS[k][1]; return s;}
+function copyRow(cls,text,mono){
+  var d=el("div",cls);
+  var c=el("code"); c.textContent=text; d.appendChild(c);
+  var b=el("button","copy"); b.type="button"; b.textContent="نسخ";
+  b.setAttribute("data-copy",text); b.setAttribute("aria-label","نسخ");
+  d.appendChild(b); return d;
+}
+var cmdBlock=function(t){return copyRow("cmd",t)};
+var promptBlock=function(t){return copyRow("prompt",t)};
+
+/* ── لوحة الخطة ── */
+var board=document.getElementById("board");
+PLAN.forEach(function(ph){
+  var w=el("article","ph"), inn=el("div","ph-in");
+  var h=el("div","ph-h");
+  var em=el("em"); em.textContent=ph.n;
+  var h3=el("h3"); h3.textContent=ph.t;
+  h.appendChild(em); h.appendChild(h3); inn.appendChild(h);
+  var g=el("p","ph-goal"); g.textContent=ph.goal; inn.appendChild(g);
+  var ul=el("ul","ph-list");
+  ph.items.forEach(function(it,i){
+    var li=el("li");
+    var idx=el("i"); idx.textContent=(i+1<10?"0":"")+(i+1); li.appendChild(idx);
+    var box=el("div");
+    var b=el("b"); b.textContent=it.name; box.appendChild(b);
+    box.appendChild(kindTag(it.k));
+    var u=el("u"); u.textContent=it.d; box.appendChild(u);
+    li.appendChild(box); ul.appendChild(li);
+  });
+  inn.appendChild(ul); w.appendChild(inn); board.appendChild(w);
+});
+
+/* ── يوم التركيب ── */
+var STORE="dalil.core.v1", saved={};
+try{ saved=JSON.parse(localStorage.getItem(STORE)||"{}"); }catch(e){ saved={}; }
+var tl=document.getElementById("core");
+CORE.forEach(function(item,i){
+  var li=el("li");
+  var n=el("span","tnum"); n.textContent="0"+(i+1); li.appendChild(n);
+  var card=el("div","tcard"), head=el("div","thead");
+  var b=el("b"); b.textContent=item.n;
+  var box=el("input","check-btn"); box.type="checkbox";
+  box.setAttribute("aria-label","تمّ تركيب "+item.n);
+  box.checked=!!saved[item.n];
+  if(box.checked) li.classList.add("done");
+  box.addEventListener("change",function(){
+    li.classList.toggle("done",box.checked);
+    saved[item.n]=box.checked;
+    try{ localStorage.setItem(STORE,JSON.stringify(saved)); }catch(e){}
+  });
+  head.appendChild(b); head.appendChild(box); card.appendChild(head);
+  var w=el("p","twhy"); w.textContent=item.why; card.appendChild(w);
+  card.appendChild(cmdBlock(item.c));
+  li.appendChild(card); tl.appendChild(li);
+});
+document.getElementById("reset").addEventListener("click",function(){
+  saved={}; try{ localStorage.removeItem(STORE); }catch(e){}
+  Array.prototype.forEach.call(tl.querySelectorAll("input"),function(i){
+    i.checked=false; i.closest("li").classList.remove("done");
+  });
+});
+
+/* ── العدّة ── */
+var grid=document.getElementById("grid"), empty=document.getElementById("empty"), countEl=document.getElementById("count");
+TOOLS.forEach(function(t){
+  var c=el("article","card"+(t.core?" core":""));
+  c.setAttribute("data-cat",t.cat);
+  c.setAttribute("data-kind",t.kind);
+  c.setAttribute("data-find",(t.name+" "+t.job+" "+(t.cmd||"")+" "+(t.note||"")+" "+CATWORDS[t.cat]+" "+KINDS[t.kind][1])
+    .replace(/<[^>]+>/g," ").toLowerCase());
+  if(t.core){ var cp=el("div","corepill"); cp.textContent="الأساس"; c.appendChild(cp); }
+  var top=el("div","top");
+  var n=el("span","name"); n.textContent=t.name; top.appendChild(n);
+  top.appendChild(kindTag(t.kind));
+  var tg=el("span","tag "+TAGS[t.tag][0]); tg.textContent=TAGS[t.tag][1]; top.appendChild(tg);
+  c.appendChild(top);
+  var j=el("p","job"); j.innerHTML=t.job; c.appendChild(j);
+  if(t.cmd) c.appendChild(cmdBlock(t.cmd));
+  if(t.cmd2) c.appendChild(cmdBlock(t.cmd2));
+  if(t.note){ var nt=el("p","note"); nt.appendChild(document.createTextNode(t.note)); c.appendChild(nt); }
+  grid.appendChild(c);
+});
+var cards=Array.prototype.slice.call(grid.children);
+var fCat="all", fKind="all", query="";
+function applyFilter(){
+  var shown=0;
+  cards.forEach(function(c){
+    var ok=(fCat==="all"||c.getAttribute("data-cat")===fCat)
+        && (fKind==="all"||c.getAttribute("data-kind")===fKind)
+        && (!query||c.getAttribute("data-find").indexOf(query)>-1);
+    c.hidden=!ok; if(ok) shown++;
+  });
+  countEl.textContent=shown+" / "+cards.length;
+  empty.hidden=shown>0;
+}
+Array.prototype.forEach.call(document.querySelectorAll(".chip"),function(chip){
+  chip.addEventListener("click",function(){
+    var group=chip.getAttribute("data-f");
+    Array.prototype.forEach.call(document.querySelectorAll('.chip[data-f="'+group+'"]'),function(o){
+      o.setAttribute("aria-pressed", o===chip?"true":"false");
+    });
+    if(group==="cat") fCat=chip.getAttribute("data-v"); else fKind=chip.getAttribute("data-v");
+    applyFilter();
+  });
+});
+document.getElementById("q").addEventListener("input",function(e){
+  query=e.target.value.trim().toLowerCase(); applyFilter();
+});
+applyFilter();
+
+/* ── الوصفات ── */
+var rl=document.getElementById("recipes-list");
+RECIPES.forEach(function(r,ri){
+  var d=el("details","rec"); if(ri===0) d.open=true;
+  var s=el("summary");
+  var num=el("span","rec-n"); num.textContent="0"+(ri+1);
+  var t=el("span","rec-t"); t.textContent=r.t;
+  var m=el("span","rec-m"); m.textContent=r.m;
+  var tt=el("span","rec-tools"); tt.textContent=r.tools;
+  s.appendChild(num); s.appendChild(t); s.appendChild(m); s.appendChild(tt);
+  d.appendChild(s);
+  var body=el("div","rec-body");
+  r.steps.forEach(function(st,i){
+    var sd=el("div","step"), sh=el("div","sh");
+    var sn=el("span","sn"); sn.textContent="0"+(i+1);
+    var stt=el("span","st"); stt.textContent=st.t;
+    sh.appendChild(sn); sh.appendChild(stt); sd.appendChild(sh);
+    if(st.d){ var p=el("p","sd"); p.textContent=st.d; sd.appendChild(p); }
+    if(st.p) sd.appendChild(promptBlock(st.p));
+    if(st.cmd) sd.appendChild(cmdBlock(st.cmd));
+    body.appendChild(sd);
+  });
+  d.appendChild(body); rl.appendChild(d);
+});
+
+/* ── التبويبات ── */
+var tabs=Array.prototype.slice.call(document.querySelectorAll(".tab"));
+tabs.forEach(function(tab){
+  tab.addEventListener("click",function(){
+    tabs.forEach(function(o){ o.setAttribute("aria-selected", o===tab?"true":"false"); });
+    var want=tab.getAttribute("data-panel");
+    Array.prototype.forEach.call(document.querySelectorAll(".panel"),function(p){
+      p.hidden = p.id !== "p-"+want;
+    });
+    window.scrollTo({top:0,behavior:"smooth"});
+  });
+});
+
+/* ── النسخ ── */
+function fallback(text,cb){
+  var ta=document.createElement("textarea");
+  ta.value=text; ta.setAttribute("readonly","");
+  ta.style.cssText="position:fixed;top:-1000px;opacity:0";
+  document.body.appendChild(ta); ta.select();
+  try{ document.execCommand("copy"); cb(); }catch(e){}
+  document.body.removeChild(ta);
+}
+document.addEventListener("click",function(e){
+  var b=e.target.closest?e.target.closest("[data-copy]"):null;
+  if(!b) return;
+  var text=b.getAttribute("data-copy");
+  var done=function(){
+    var old=b.textContent;
+    b.textContent="نُسخ ✓"; b.classList.add("ok");
+    setTimeout(function(){ b.textContent=old; b.classList.remove("ok"); },1400);
+  };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done,function(){ fallback(text,done); });
+  } else { fallback(text,done); }
+});
+
+/* ── الوضع ── */
+var togBtn=document.getElementById("tog");
+togBtn.addEventListener("click",function(){
+  var r=document.documentElement;
+  var next=r.getAttribute("data-theme")==="light"?"dark":"light";
+  r.setAttribute("data-theme",next);
+  togBtn.textContent = next==="light" ? "داكن" : "فاتح";
+});
+
+})();
+</script>
+
+
+</body>
+</html>
