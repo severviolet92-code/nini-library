@@ -356,6 +356,30 @@ footer a{color:var(--honey)}
 .reset{background:none; border:1px solid var(--line); color:var(--text-faint); cursor:pointer; border-radius:var(--r-pill); padding:.25rem .8rem; font-family:var(--font-mono); font-size:.7rem}
 .reset:hover{color:var(--amber); border-color:var(--amber)}
 
+
+/* ══ روابط بطاقات مكتبة سلمان ══ */
+a.lib{
+  color:inherit; text-decoration:none; cursor:pointer;
+  border-bottom:1px dashed color-mix(in srgb, var(--honey) 55%, transparent);
+  transition:color .15s, border-color .15s;
+}
+a.lib::after{content:"\2197"; font-size:.72em; margin-inline-start:.22em; opacity:.65; vertical-align:.12em}
+a.lib:hover{color:var(--honey); border-bottom-color:var(--honey)}
+a.lib:hover::after{opacity:1}
+:root[data-theme="light"] a.lib:hover{color:var(--amber)}
+a.pl-name{font-family:var(--font-mono); font-size:.82rem; font-weight:700; color:var(--text); unicode-bidi:isolate}
+a.tl-name{font-family:var(--font-mono); font-size:.92rem; color:var(--honey); font-weight:700}
+:root[data-theme="light"] a.tl-name{color:var(--text)}
+.libnote{
+  display:flex; align-items:center; gap:.5rem; flex-wrap:wrap;
+  margin-top:.9rem; padding:.55rem .9rem; border-radius:var(--r-pill);
+  background:rgba(255,196,81,.09); border:1px solid rgba(255,196,81,.3);
+  font-size:.85rem; color:var(--text-soft); width:fit-content;
+}
+:root[data-theme="light"] .libnote{background:rgba(126,95,14,.07); border-color:rgba(126,95,14,.3)}
+.libnote b{color:var(--honey); font-weight:700}
+:root[data-theme="light"] .libnote b{color:var(--amber)}
+
 @media (prefers-reduced-motion:reduce){*{animation:none !important; transition:none !important} html{scroll-behavior:auto}}
 </style>
 
@@ -407,6 +431,7 @@ footer a{color:var(--honey)}
       <span class="kind k-tool">أداة</span> <span class="kind k-pack">حزمة</span>.
       التفاصيل وأوامر التركيب في تبويب «العدّة».
     </p>
+    <div class="libnote">اضغطي على <b>اسم أي أداة</b> لتفتح بطاقتها الكاملة في مكتبة سلمان — خطوات التركيب والشرح والفيديو ↗</div>
   </div>
   <div class="board" id="board"></div>
 </section>
@@ -416,6 +441,7 @@ footer a{color:var(--honey)}
   <div class="phead">
     <h2>العدّة كاملة</h2>
     <p class="sub">كل أداة مجانية أو مشمولة باشتراك Claude. صفّي بالنوع أو بالمجال، أو ابحثي بالعربي.</p>
+    <div class="libnote">اضغطي على <b>اسم أي أداة</b> لتفتح بطاقتها الكاملة في مكتبة سلمان — خطوات التركيب والشرح والفيديو ↗</div>
   </div>
   <div class="controls">
     <input id="q" type="search" placeholder="ابحثي: شعار، فيديو، دفع، تيشرت…" aria-label="بحث في العدّة">
@@ -443,6 +469,7 @@ footer a{color:var(--honey)}
   <div class="phead">
     <h2>يوم التركيب: نصف ساعة، مرة واحدة</h2>
     <p class="sub">ستة فقط. كل أمر ينسخ ويلصق في الترمنال وأنتِ داخل مجلد أي مشروع، ثم أغلقي Claude Code وافتحيه.</p>
+    <div class="libnote">اضغطي على <b>اسم أي أداة</b> لتفتح بطاقتها الكاملة في مكتبة سلمان — خطوات التركيب والشرح والفيديو ↗</div>
   </div>
   <div class="two">
     <div>
@@ -536,6 +563,19 @@ footer a{color:var(--honey)}
 (function(){
 "use strict";
 
+var SLUG={"superpowers": "superpowers", "brainstorming": "brainstorming-superpowers", "writing-plans": "writing-plans", "grill-me": "grill-me", "ultraplan": "ultraplan", "find-skills": "find-skills", "Claude Skills Library": "claude-skills-library", "claude-mem": "claude-mem", "teach": "teach", "Context7 MCP": "context7-mcp", "Exa MCP": "exa-mcp", "Notion MCP": "notion-mcp", "Gemini CLI": "gemini-cli", "uv": "uv", "best-claude-hud": "best-claude-hud", "MarkItDown": "markitdown", "Wispr Flow": "wispr-flow", "brandkit": "brandkit", "Claude Design": "claude-design", "banana-claude": "banana-claude", "Google AI Studio": "google-ai-studio", "Figma MCP": "figma-mcp", "extract-design-system": "extract-design-system", "Canva MCP": "canva-mcp", "Open Design": "open-design", "HTML Anything": "html-anything", "Pomelli": "pomelli", "YouMind Prompts": "youmind-prompts", "frontend-design": "frontend-design-anthropic", "image-to-code": "image-to-code", "ui-ux-pro-max": "ui-ux-pro-max", "impeccable": "impeccable", "web-design-guidelines": "web-design-guidelines", "anti-ui-slop": "anti-ui-slop", "jakubkrehel/skills": "jakubkrehel-skills", "redesign-existing-projects": "redesign-existing-projects", "deploy-to-vercel": "deploy-to-vercel", "Vercel MCP": "vercel-mcp", "Chrome DevTools MCP": "chrome-devtools-mcp", "Playwright MCP": "playwright-mcp", "Supabase MCP": "supabase-mcp", "GitHub MCP": "github-mcp", "GitHub CLI": "github-cli", "Claude Directory": "claude-directory", "Google Stitch": "google-stitch", "hyperframes": "hyperframes", "product-launch-video": "product-launch-video", "faceless-explainer": "faceless-explainer", "motion-graphics": "motion-graphics", "website-to-video": "website-to-video", "video-shotcraft": "video-shotcraft", "Chatterbox": "chatterbox-tts", "ElevenLabs MCP": "elevenlabs-mcp", "text-to-lottie": "text-to-lottie", "humanizer": "humanizer", "marketing-psychology": "marketing-psychology", "copywriting": "copywriting", "copy-editing": "copy-editing", "marketing-ideas": "marketing-ideas", "content-strategy": "content-strategy", "seo-audit": "seo-audit", "Shopify Dev MCP": "shopify-dev-mcp", "Stripe MCP": "stripe-mcp", "PayPal MCP": "paypal-mcp", "Airtable MCP": "airtable-mcp", "Anthropic Skills": "anthropic-skills", "Knowledge Work Plugins": "knowledge-work-plugins", "GenOffice": "genoffice", "Trends MCP": "trends-mcp"};
+var LIB="https://maktaba-alpha.vercel.app/tools/";
+function libLink(name, cls){
+  var slug=SLUG[name];
+  if(!slug){ var s=document.createElement("span"); s.className=cls; s.textContent=name; return s; }
+  var a=document.createElement("a");
+  a.className=cls+" lib";
+  a.href=LIB+slug+"/";
+  a.target="_blank"; a.rel="noopener";
+  a.title="افتحي بطاقة "+name+" في مكتبة سلمان — خطوات التركيب كاملة";
+  a.textContent=name;
+  return a;
+}
 var KINDS={skill:["k-skill","سكيل"],mcp:["k-mcp","MCP"],cli:["k-cli","CLI"],tool:["k-tool","أداة"],pack:["k-pack","حزمة"]};
 var TAGS={free:["t-free","مجاني"],key:["t-key","مفتاح مجاني"],plan:["t-plan","مع اشتراكك"]};
 
@@ -789,7 +829,7 @@ PLAN.forEach(function(ph){
     var li=el("li");
     var idx=el("i"); idx.textContent=(i+1<10?"0":"")+(i+1); li.appendChild(idx);
     var box=el("div");
-    var b=el("b"); b.textContent=it.name; box.appendChild(b);
+    box.appendChild(libLink(it.name,"pl-name"));
     box.appendChild(kindTag(it.k));
     var u=el("u"); u.textContent=it.d; box.appendChild(u);
     li.appendChild(box); ul.appendChild(li);
@@ -805,7 +845,7 @@ CORE.forEach(function(item,i){
   var li=el("li");
   var n=el("span","tnum"); n.textContent="0"+(i+1); li.appendChild(n);
   var card=el("div","tcard"), head=el("div","thead");
-  var b=el("b"); b.textContent=item.n;
+  var b=libLink(item.n,"tl-name");
   var box=el("input","check-btn"); box.type="checkbox";
   box.setAttribute("aria-label","تمّ تركيب "+item.n);
   box.checked=!!saved[item.n];
@@ -837,7 +877,7 @@ TOOLS.forEach(function(t){
     .replace(/<[^>]+>/g," ").toLowerCase());
   if(t.core){ var cp=el("div","corepill"); cp.textContent="الأساس"; c.appendChild(cp); }
   var top=el("div","top");
-  var n=el("span","name"); n.textContent=t.name; top.appendChild(n);
+  top.appendChild(libLink(t.name,"name"));
   top.appendChild(kindTag(t.kind));
   var tg=el("span","tag "+TAGS[t.tag][0]); tg.textContent=TAGS[t.tag][1]; top.appendChild(tg);
   c.appendChild(top);
